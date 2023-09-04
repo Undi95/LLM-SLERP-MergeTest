@@ -14,9 +14,8 @@ import subprocess
 import os
 import shutil
 import json
-import tkinter as tk
-from tkinter import filedialog
 from colorama import init, Fore, Style
+import sys
 
 newline = '\n'
 def clear_console():
@@ -95,12 +94,6 @@ def load_sharded_model(path):
         state_dict.update(shard)
     return {'state_dict': state_dict}
 
-def select_path(title):
-    root = tk.Tk()
-    root.withdraw()
-    path = filedialog.askdirectory(title=title)
-    return path
-
 def load_model(path):
     if os.path.exists(os.path.join(path, 'pytorch_model.bin')):
         state_dict = torch.load(os.path.join(path, 'pytorch_model.bin'), map_location='cpu')
@@ -111,9 +104,9 @@ def load_model(path):
 def save_model(model, path):
     torch.save(model, path)
 
-primary_model_path = select_path("Select the first model")
-secondary_model_path = select_path("Select the second model")
-blended_model_savedir = select_path("Select the directory to save the blended model")
+primary_model_path = sys.argv[1]
+secondary_model_path = sys.argv[2]
+blended_model_savedir = sys.argv[3]
 
 primary_model = load_model(primary_model_path)
 secondary_model = load_model(secondary_model_path)
