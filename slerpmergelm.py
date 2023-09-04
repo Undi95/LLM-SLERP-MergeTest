@@ -136,6 +136,7 @@ for key, value in v0.items():
 
 model = AutoModelForCausalLM.from_config(AutoConfig.from_pretrained(primary_model_path))
 model.load_state_dict(primary_model['state_dict'])
+model.half()
 model.save_pretrained(blended_model_savedir, max_shard_size="20000MiB")
 
 #save_model_path = blended_model_savedir + '/pytorch_model.bin'
