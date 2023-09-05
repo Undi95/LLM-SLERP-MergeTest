@@ -119,7 +119,7 @@ for key in set(v0.keys()).union(set(v1.keys())):
     if key in v0 and key in v1:
         # Check if both values are tensors
         if isinstance(v0[key], torch.Tensor) and isinstance(v1[key], torch.Tensor):
-            v0[key] = slerp((float(1.0) - 0.5), v0[key], v1[key])
+            v0[key] = slerp((float(1.0) - float(sys.argv[4])), v0[key], v1[key])
         else:
             print(f"Skipping key {key} because it does not point to tensors.")
     if key in v1 and key not in v0:
