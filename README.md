@@ -29,9 +29,9 @@ pip install -r requirements.txt
 ```
 4. Run the SLERP script.
 ```bash
-python slerpmergelm.py "model1" "model2" "result" "weight (like 0.6)"
+python slerpmergelm.py "model1" "model2" "result" "weight like [0.8, 0.2, 0.8]"
 ```
-5. Ensure parent models are of the same architecture and parameter size (for example both LLaMa2 13B pretrained language models). The script will do the rest, spherical merging both parent models and saving the offspring model to the selected save directory. For added convenience, it will also scan both parent directories to see if one has a special_tokens_map.json and will proceed to copy all relevant tokenizer files from there to the child directory (in case both or neither contains the special_tokens_map, it will still copy necessary files to the child dir providing a model instantly ready to use when the process is complete).
+5. Ensure parent models are of the same architecture and parameter size (for example both LLaMa2 13B pretrained language models). The script will do the rest, spherical merging both parent models and saving the offspring model to the selected save directory. For added convenience, it will also scan both parent directories to see if one has a special_tokens_map.json and will proceed to copy all relevant tokenizer files from there to the child directory (in case both or neither contains the special_tokens_map, it will still copy necessary files to the child dir providing a model instantly ready to use when the process is complete). NEW : Gradiant.
 
 ---
 
