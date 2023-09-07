@@ -114,10 +114,10 @@ secondary_model = load_model(secondary_model_path)
 v0 = primary_model['state_dict']
 v1 = secondary_model['state_dict']
 
-gradient_values = list(sys.args[4])
+gradient_values = [float(x) for x in sys.argv[4].split(",")]
 sections = len(gradient_values) - 1
-tensors_per_section = len(keys) // sections
 keys = set(v0.keys()).union(set(v1.keys()))
+tensors_per_section = len(keys) // sections
 
 # Generate a smoothly interpolated list of blend ratios for the entire model
 blend_ratios = []
