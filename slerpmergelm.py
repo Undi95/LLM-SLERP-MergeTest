@@ -102,7 +102,7 @@ def load_model(path):
         return load_sharded_model(path)
 
 def save_model(model, path):
-    torch.save(model, path)
+    torch.save(model.half(), path)
 
 primary_model_path = sys.argv[1]
 secondary_model_path = sys.argv[2]
