@@ -114,12 +114,28 @@ secondary_model = load_model(secondary_model_path)
 v0 = primary_model['state_dict']
 v1 = secondary_model['state_dict']
 
+gradient_values = list(sys.args[4])
+sections = len(gradient_values) - 1
+tensors_per_section = len(keys) // sections
+keys = set(v0.keys()).union(set(v1.keys()))
+
+# Generate a smoothly interpolated list of blend ratios for the entire model
+blend_ratios = []
+for i in range(sections):
+    start_value = gradient_values[i]
+    end_value = gradient_values[i + 1]
+    blend_ratios.extend(np.linspace(start_value, end_value, tensors_per_section))
+
+remainder = len(keys) - len(blend_ratios)
+if remainder:
+    blend_ratios.extend([gradient_values[-1]] * remainder)
+
 # Interpolating Parameters
-for key in set(v0.keys()).union(set(v1.keys())):
+for idx, key in enumerate(keys):
     if key in v0 and key in v1:
         # Check if both values are tensors
         if isinstance(v0[key], torch.Tensor) and isinstance(v1[key], torch.Tensor):
-            v0[key] = slerp((float(1.0) - float(sys.argv[4])), v0[key], v1[key])
+            v0[key] = slerp((float(1.0) - float(blend_ratios[idx])), v0[key], v1[key])
         else:
             print(f"Skipping key {key} because it does not point to tensors.")
     if key in v1 and key not in v0:
@@ -136,7 +152,6 @@ for key, value in v0.items():
 
 model = AutoModelForCausalLM.from_config(AutoConfig.from_pretrained(primary_model_path))
 model.load_state_dict(primary_model['state_dict'])
-model.half()
 model.save_pretrained(blended_model_savedir, max_shard_size="20000MiB")
 
 #save_model_path = blended_model_savedir + '/pytorch_model.bin'
